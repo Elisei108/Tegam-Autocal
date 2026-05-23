@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TegamCAL — Dashboard Mockup</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-main:    #1c1f26;
+      --bg-panel:   #22262f;
+      --bg-card:    #2a2f3a;
+      --bg-header:  #161920;
+      --cyan:       #00BCD4;
+      --cyan-glow:  rgba(0,188,212,0.13);
+      --cyan-border:rgba(0,188,212,0.35);
+      --green:      #81C784;
+      --green-bg:   rgba(129,199,132,0.10);
+      --green-bdr:  rgba(129,199,132,0.30);
+      --red:        #E57373;
+      --red-bg:     rgba(229,115,115,0.10);
+      --red-bdr:    rgba(229,115,115,0.35);
+      --yellow:     #FFB74D;
+      --yellow-bg:  rgba(255,183,77,0.10);
+      --gray:       #78909C;
+      --text-main:  #DDE3EC;
+      --text-dim:   #8899AA;
+      --border:     #333a47;
+      --ui:         'Segoe UI', Arial, sans-serif;
+      --mono:       Consolas, 'Courier New', monospace;
+    }
+
+    body {
+      background: #0f1117;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      font-family: var(--ui);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    .mockup-label {
+      font-size: 11px;
+      color: #555e72;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-family: var(--ui);
+    }
+
+    /* ── App frame 1280 × 790 ── */
+    #app {
+      width: 1280px;
+      height: 790px;
+      background: var(--bg-main);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    }
+
+    /* ══════════════════════════════
+       HEADER
+    ══════════════════════════════ */
+    #header {
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    .logo sub {
+      font-size: 10px;
+      color: var(--text-dim);
+      font-weight: 400;
+      letter-spacing: 0;
+      margin-left: 4px;
+    }
+
+    .vsep {
+      width: 1px;
+      height: 34px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* Instrument badges */
+    .instruments { display: flex; gap: 8px; align-items: center; }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+    .badge.ok  { border-color: var(--green-bdr); }
+    .badge.err { border-color: var(--red-bdr); }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot.green { background: var(--green); box-shadow: 0 0 5px var(--green); }
+    .dot.red   { background: var(--red); }
+
+    .badge-name { color: var(--text-main); }
+    .badge-port { color: var(--text-dim); font-family: var(--mono); font-size: 11px; margin-left: 2px; }
+
+    .btn-sm {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-dim);
+      font-size: 11px;
+      padding: 4px 9px;
+      cursor: pointer;
+      font-family: var(--ui);
+    }
+
+    /* Session fields — pushed right */
+    .session { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+
+    .fgroup { display: flex; flex-direction: column; gap: 2px; }
+    .flabel {
+      font-size: 9.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .finput {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-main);
+      font-size: 12px;
+      font-family: var(--mono);
+      padding: 4px 8px;
+      width: 72px;
+      text-align: center;
+    }
+    .finput.wide { width: 112px; }
+
+    select.finput {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%2378909C'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      width: 152px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    /* ══════════════════════════════
+       STEPPER
+    ══════════════════════════════ */
+    #stepper {
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border);
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-shrink: 0;
+      padding: 0 60px;
+    }
+
+    .step { display: flex; align-items: center; gap: 8px; }
+
+    .step-circle {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 2px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step-circle.active  { border-color: var(--cyan);  background: var(--cyan-glow);  color: var(--cyan);  }
+    .step-circle.done    { border-color: var(--green); background: var(--green-bg);   color: var(--green); }
+    .step-circle.future  { border-color: var(--border); background: transparent; color: var(--text-dim); }
+    .step-circle.skipped { border-color: var(--yellow); background: var(--yellow-bg); color: var(--yellow); }
+
+    .step-lbl { font-size: 12.5px; white-space: nowrap; }
+    .step-lbl.active  { color: var(--cyan);  font-weight: 600; }
+    .step-lbl.done    { color: var(--green); }
+    .step-lbl.future  { color: var(--text-dim); }
+    .step-lbl.skipped { color: var(--yellow); font-size: 11px; }
+
+    .conn {
+      flex: 1;
+      height: 1px;
+      min-width: 80px;
+      max-width: 140px;
+      background: var(--border);
+      margin: 0 14px;
+    }
+    .conn.done { background: rgba(129,199,132,0.4); }
+
+    /* ══════════════════════════════
+       BODY
+    ══════════════════════════════ */
+    #body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── Left panel ── */
+    #points-panel {
+      width: 196px;
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      padding-top: 14px;
+    }
+
+    .panel-title {
+      font-size: 9.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 16px 8px;
+    }
+
+    .pt-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 16px 10px 13px;
+      border-left: 3px solid transparent;
+    }
+    .pt-item.done   { border-left-color: var(--green); }
+    .pt-item.active { border-left-color: var(--cyan); background: var(--cyan-glow); }
+    .pt-item.idle   {}
+
+    .pt-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .pt-dot.done   { background: var(--green); }
+    .pt-dot.active { background: var(--cyan); box-shadow: 0 0 7px var(--cyan); }
+    .pt-dot.idle   { background: #3b4253; }
+
+    .pt-name { font-size: 13px; }
+    .pt-item.done   .pt-name { color: var(--green); }
+    .pt-item.active .pt-name { color: var(--cyan); font-weight: 600; }
+    .pt-item.idle   .pt-name { color: var(--text-dim); }
+
+    .pt-val {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--text-dim);
+      margin-left: auto;
+    }
+    .pt-check { font-size: 11px; color: var(--green); margin-left: 2px; }
+
+    /* ── Main panel ── */
+    #main-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 14px 16px 14px 14px;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    /* Table section */
+    #tbl-section {
+      flex: 1;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sec-title {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    .tbl-wrap { flex: 1; overflow: auto; padding: 0 4px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      font-family: var(--ui);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 8px 10px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+      background: rgba(42,47,58,0.5);
+      position: sticky;
+      top: 0;
+    }
+    thead th:first-child { text-align: left; padding-left: 14px; }
+
+    tbody tr { border-bottom: 1px solid rgba(51,58,71,0.5); }
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody td {
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 9px 10px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    tbody td:first-child {
+      font-family: var(--ui);
+      font-size: 12px;
+      text-align: left;
+      padding-left: 14px;
+      color: var(--text-dim);
+    }
+
+    tr.r-pass { background: rgba(129,199,132,0.035); }
+    tr.r-active { background: rgba(0,188,212,0.035); }
+
+    .c-pass  { color: var(--green); }
+    .c-fail  { color: var(--red); }
+    .c-meas  { color: var(--text-main); }
+    .c-mean  { color: var(--cyan); font-weight: 600; }
+    .c-u     { color: var(--yellow); }
+    .c-dash  { color: #3b4555; }
+    .c-live  { color: var(--cyan); }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .blink { animation: blink 1.1s infinite; }
+
+    .sbadge {
+      display: inline-block;
+      padding: 2px 11px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-family: var(--ui);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .sb-pass    { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-bdr); }
+    .sb-fail    { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-bdr); }
+    .sb-running { background: var(--cyan-glow); color: var(--cyan);   border: 1px solid var(--cyan-border); }
+    .sb-pending { background: transparent;      color: var(--text-dim); border: 1px solid var(--border); }
+
+    /* Log section */
+    #log-section {
+      height: 128px;
+      flex-shrink: 0;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .log-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 14px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    .log-ttl {
+      font-size: 9.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .btn-log {
+      font-size: 11px;
+      color: var(--cyan);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--ui);
+    }
+
+    .log-lines { flex: 1; overflow-y: auto; padding: 4px 10px; }
+
+    .log-row {
+      display: flex;
+      gap: 8px;
+      padding: 2.5px 0;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      line-height: 1.45;
+    }
+    .log-ts  { color: #505b6e; flex-shrink: 0; }
+    .log-lvl { flex-shrink: 0; width: 40px; font-size: 10.5px; font-weight: 700; }
+    .log-msg { color: var(--text-main); }
+
+    .lvl-info { color: var(--text-dim); }
+    .lvl-pass { color: var(--green); }
+    .lvl-fail { color: var(--red); }
+    .lvl-warn { color: var(--yellow); }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    #footer {
+      background: var(--bg-header);
+      border-top: 1px solid var(--border);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-shrink: 0;
+      padding: 0 24px;
+    }
+
+    .prog-info {
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--text-dim);
+      margin-right: 20px;
+    }
+    .prog-info em { color: var(--cyan); font-style: normal; font-weight: 600; }
+
+    .btn-start {
+      background: var(--cyan);
+      color: #071419;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--ui);
+      padding: 10px 44px;
+      cursor: pointer;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .btn-start:disabled {
+      background: #2a3540;
+      color: #4a5c66;
+      cursor: default;
+    }
+
+    .btn-stop {
+      background: transparent;
+      color: var(--red);
+      border: 1px solid var(--red-bdr);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--ui);
+      padding: 10px 28px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="mockup-label">TegamCAL — Dashboard Mockup v1 — Layout approval</div>
+
+<div id="app">
+
+  <!-- ══ HEADER ══ -->
+  <div id="header">
+    <div class="logo">TegamCAL<sub>Stage 1</sub></div>
+    <div class="vsep"></div>
+
+    <div class="instruments">
+      <div class="badge ok">
+        <div class="dot green"></div>
+        <span class="badge-name">Tegam 1750</span>
+        <span class="badge-port">COM3</span>
+      </div>
+      <div class="badge ok">
+        <div class="dot green"></div>
+        <span class="badge-name">Arduino</span>
+        <span class="badge-port">COM4</span>
+      </div>
+      <button class="btn-sm">⟳ Reconnect</button>
+    </div>
+
+    <div class="session">
+      <div class="fgroup">
+        <div class="flabel">Temp</div>
+        <input class="finput" value="23.2 °C" readonly>
+      </div>
+      <div class="fgroup">
+        <div class="flabel">RH</div>
+        <input class="finput" value="48 %" readonly>
+      </div>
+      <div class="vsep"></div>
+      <div class="fgroup">
+        <div class="flabel">Instrument S/N</div>
+        <input class="finput wide" value="TG-001234" readonly>
+      </div>
+      <div class="vsep"></div>
+      <div class="fgroup">
+        <div class="flabel">Technician</div>
+        <select class="finput">
+          <option>Иванов И.И.</option>
+          <option>Петров П.П.</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ STEPPER ══ -->
+  <div id="stepper">
+    <div class="step">
+      <div class="step-circle active">①</div>
+      <div class="step-lbl active">As Found</div>
+    </div>
+    <div class="conn"></div>
+    <div class="step">
+      <div class="step-circle future">②</div>
+      <div class="step-lbl future">Adjust</div>
+    </div>
+    <div class="conn"></div>
+    <div class="step">
+      <div class="step-circle future">③</div>
+      <div class="step-lbl future">As Left</div>
+    </div>
+    <div class="conn"></div>
+    <div class="step">
+      <div class="step-circle future">④</div>
+      <div class="step-lbl future">Report</div>
+    </div>
+  </div>
+
+  <!-- ══ BODY ══ -->
+  <div id="body">
+
+    <!-- Left: calibration points -->
+    <div id="points-panel">
+      <div class="panel-title">Cal Points</div>
+
+      <div class="pt-item done">
+        <div class="pt-dot done"></div>
+        <span class="pt-name">Point 1</span>
+        <span class="pt-val">2 Ω</span>
+        <span class="pt-check">✓</span>
+      </div>
+
+      <div class="pt-item active">
+        <div class="pt-dot active"></div>
+        <span class="pt-name">Point 2</span>
+        <span class="pt-val">20 Ω</span>
+      </div>
+
+      <div class="pt-item idle">
+        <div class="pt-dot idle"></div>
+        <span class="pt-name">Point 3</span>
+        <span class="pt-val">200 Ω</span>
+      </div>
+
+      <div class="pt-item idle">
+        <div class="pt-dot idle"></div>
+        <span class="pt-name">Point 4</span>
+        <span class="pt-val">2 kΩ</span>
+      </div>
+    </div>
+
+    <!-- Right: table + log -->
+    <div id="main-panel">
+
+      <div id="tbl-section">
+        <div class="sec-title">Measurements — As Found</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Point</th>
+                <th>#1</th>
+                <th>#2</th>
+                <th>#3</th>
+                <th>#4</th>
+                <th>#5</th>
+                <th>Mean</th>
+                <th>U (k=2)</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Point 1 — complete, PASS -->
+              <tr class="r-pass">
+                <td>1 &mdash; 2.0000 Ω</td>
+                <td class="c-pass">1.9998</td>
+                <td class="c-pass">2.0001</td>
+                <td class="c-pass">1.9999</td>
+                <td class="c-pass">2.0002</td>
+                <td class="c-pass">2.0001</td>
+                <td class="c-mean">2.0000</td>
+                <td class="c-u">±0.0002</td>
+                <td><span class="sbadge sb-pass">PASS</span></td>
+              </tr>
+
+              <!-- Point 2 — measuring #3 -->
+              <tr class="r-active">
+                <td>2 &mdash; 20.000 Ω</td>
+                <td class="c-meas">20.001</td>
+                <td class="c-meas">19.999</td>
+                <td class="c-live">20.002 <span class="blink">●</span></td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td><span class="sbadge sb-running">…</span></td>
+              </tr>
+
+              <!-- Point 3 — pending -->
+              <tr>
+                <td>3 &mdash; 200.00 Ω</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td><span class="sbadge sb-pending">&mdash;</span></td>
+              </tr>
+
+              <!-- Point 4 — pending -->
+              <tr>
+                <td>4 &mdash; 2.0000 kΩ</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td class="c-dash">&mdash;</td>
+                <td><span class="sbadge sb-pending">&mdash;</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Log -->
+      <div id="log-section">
+        <div class="log-hdr">
+          <div class="log-ttl">Event Log</div>
+          <button class="btn-log">View Full Log ↗</button>
+        </div>
+        <div class="log-lines">
+          <div class="log-row">
+            <span class="log-ts">[14:23:41]</span>
+            <span class="log-lvl lvl-info">INFO</span>
+            <span class="log-msg">Calibration started — SN: TG-001234 &nbsp;|&nbsp; Temp: 23.2°C &nbsp;RH: 48% &nbsp;|&nbsp; Иванов И.И.</span>
+          </div>
+          <div class="log-row">
+            <span class="log-ts">[14:23:43]</span>
+            <span class="log-lvl lvl-info">INFO</span>
+            <span class="log-msg">Point 1 (2.0000 Ω) — measuring...</span>
+          </div>
+          <div class="log-row">
+            <span class="log-ts">[14:23:50]</span>
+            <span class="log-lvl lvl-pass">PASS</span>
+            <span class="log-msg">Point 1 — PASS &nbsp; Mean: 2.0000 Ω &nbsp; U: ±0.0002 Ω &nbsp; Tol: ±0.0006 Ω</span>
+          </div>
+          <div class="log-row">
+            <span class="log-ts">[14:23:51]</span>
+            <span class="log-lvl lvl-info">INFO</span>
+            <span class="log-msg">Point 2 (20.000 Ω) — measuring #3 of 5...</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /#main-panel -->
+  </div><!-- /#body -->
+
+  <!-- ══ FOOTER ══ -->
+  <div id="footer">
+    <div class="prog-info">
+      As Found &nbsp;—&nbsp; Point <em>2</em> of 4 &nbsp;—&nbsp; Measurement <em>3</em> of 5
+    </div>
+    <button class="btn-start" disabled>▶&nbsp; Running…</button>
+    <button class="btn-stop">■&nbsp; Stop</button>
+  </div>
+
+</div><!-- /#app -->
+</body>
+</html>
