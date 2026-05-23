@@ -94,18 +94,28 @@ class Tegam1750Mock:
         if self.is_open_wire:
             return "29.999  MOhm"
 
-        noise = random.uniform(-0.005, 0.005)
-        measured_val = self.connected_resistor + noise
+        r = self.connected_resistor
 
-        if measured_val < 1.0:
-            val_str = f"{measured_val * 1000:.4f}"
-            return f"  {val_str} mOhm"
-        elif measured_val < 1000:
-            val_str = f"{measured_val:.3f}"
-            return f" {val_str}  Ohm"
+        if r <= 2.0:
+            noise = random.randint(-5, 5) * 0.0001
+            val = round(r + noise, 4)
+            return f"  {val:.4f}  Ohm"
+        elif r <= 20.0:
+            noise = random.randint(-5, 5) * 0.001
+            val = round(r + noise, 3)
+            return f" {val:.3f}  Ohm"
+        elif r <= 200.0:
+            noise = random.randint(-5, 5) * 0.01
+            val = round(r + noise, 2)
+            return f"{val:.2f}   Ohm"
+        elif r <= 2000.0:
+            noise = random.randint(-5, 5) * 0.1
+            val_k = round((r + noise) / 1000, 4)
+            return f"  {val_k:.4f} KOhm"
         else:
-            val_str = f"{measured_val / 1000:.4f}"
-            return f"  {val_str} KOhm"
+            noise = random.randint(-5, 5) * 1.0
+            val_k = round((r + noise) / 1000, 3)
+            return f" {val_k:.3f} KOhm"
 
     def parse_reading(self, raw_string):
         if not raw_string:

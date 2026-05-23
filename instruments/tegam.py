@@ -1,4 +1,5 @@
 import math
+import re
 from config import USE_MOCK, COM_PORT, BAUDRATE, TIMEOUT
 
 if USE_MOCK:
@@ -6,11 +7,16 @@ if USE_MOCK:
 else:
     from instruments.tegam_real import Tegam1750 as _Tegam1750Base
 
+# Conversion factors: base Ohm → native display unit
+_OHM_TO_UNIT = {"mOhm": 1e3, "Ohm": 1.0, "KOhm": 1e-3, "MOhm": 1e-6}
+_DISPLAY_DECIMALS = {"mOhm": 1, "Ohm": 3, "KOhm": 4, "MOhm": 4}
 
-def _extract_display_unit(raw_string):
-    import re
-    m = re.search(r'[a-zA-Zµ]+[Oo]hm', raw_string)
-    return m.group(0) if m else "Ohm"
+
+def _native_unit(raw_string):
+    """Return (unit, factor) where factor converts base-Ohm → native unit."""
+    m = re.search(r'(KOhm|MOhm|mOhm|Ohm)', raw_string)
+    unit = m.group(1) if m else "Ohm"
+    return unit, _OHM_TO_UNIT.get(unit, 1.0)
 
 
 class Tegam1750(_Tegam1750Base):
@@ -20,10 +26,13 @@ class Tegam1750(_Tegam1750Base):
         """Take n readings and compute GUM Type A uncertainty.
 
         Returns dict with keys:
-            mean               — arithmetic mean (base Ohm)
-            uncertainty_expanded — U = 2*u, k=2, 95%
-            unit               — display unit extracted from raw string
-            all_readings       — list of n valid float readings
+            mean                        — arithmetic mean, base Ohm (for DB / calculations)
+            uncertainty_expanded        — U = 2*u, k=2, 95%, base Ohm
+            unit                        — "Ohm" (base unit for internal use)
+            all_readings                — list of n valid readings in base Ohm
+            display_unit                — native Tegam unit ("Ohm", "KOhm", "MOhm")
+            display_value               — mean in display_unit
+            display_uncertainty_expanded — U in display_unit
         Returns None if fewer than 2 valid readings obtained.
         """
         readings = []
@@ -44,11 +53,16 @@ class Tegam1750(_Tegam1750Base):
         u = s / math.sqrt(len(readings))
         U = 2 * u
 
+        d_unit, factor = _native_unit(first_raw) if first_raw else ("Ohm", 1.0)
+
         return {
             "mean": mean,
             "uncertainty_expanded": U,
-            "unit": _extract_display_unit(first_raw) if first_raw else "Ohm",
+            "unit": "Ohm",
             "all_readings": readings,
+            "display_unit": d_unit,
+            "display_value": mean * factor,
+            "display_uncertainty_expanded": U * factor,
         }
 
 
