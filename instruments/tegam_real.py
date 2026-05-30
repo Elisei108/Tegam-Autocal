@@ -66,16 +66,20 @@ class Tegam1750:
             multiplier = 1.0
             if unit_str:
                 unit_upper = unit_str.upper()
-                if "UOHM" in unit_upper or "µOHM" in unit_upper:
-                    multiplier = 1e-6
-                elif "MOHM" in unit_upper:
-                    multiplier = 1e6
-                elif "KOHM" in unit_upper:
-                    multiplier = 1e3
-                elif "MOHM" in unit_str and "m" in unit_str:
-                    multiplier = 1e-3
-                elif "OHM" in unit_upper:
-                    multiplier = 1.0
+                # ВАЖНО: проверяем mOhm (миллиОм) ДО MOhm (мегаОм)!
+                # Tegam 1750 возвращает строку вида "1.2345 mOhm" — маленькая 'm'
+                # Если проверять unit_upper, то и 'mOhm' и 'MOhm' дают 'MOHM' — неразличимы.
+                # Поэтому сначала проверяем оригинальный unit_str (case-sensitive).
+                if "uOhm" in unit_str or "µOhm" in unit_str or "uohm" in unit_str:
+                    multiplier = 1e-6   # микроОм
+                elif "mOhm" in unit_str or "mohm" in unit_str:
+                    multiplier = 1e-3   # миллиОм (маленькая m!)
+                elif "MOhm" in unit_str or "MOHM" in unit_upper:
+                    multiplier = 1e6    # мегаОм (большая M)
+                elif "kOhm" in unit_str or "KOHM" in unit_upper:
+                    multiplier = 1e3    # килоОм
+                elif "Ohm" in unit_str or "OHM" in unit_upper:
+                    multiplier = 1.0    # Ом
 
             final_value = value * multiplier
             return final_value, "OK"

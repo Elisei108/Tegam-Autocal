@@ -51,7 +51,8 @@ class Tegam1750Mock:
                 match_r = re.search(r'R(\d+)', sub_cmd)
                 if match_r:
                     range_code = int(match_r.group(1))
-                    if 0 <= range_code <= 14:
+                    # Tegam 1750 по мануалу поддерживает R0..R19
+                    if 0 <= range_code <= 19:
                         self.current_range = range_code
                         print(f"[MOCK] Диапазон установлен на R{self.current_range}")
                     else:

@@ -18,7 +18,10 @@ class RelayController:
         self.ser.reset_input_buffer()
         startup = self.ser.readline().decode('ascii', errors='ignore').strip()
         if 'Ready' not in startup:
-            pass
+            # Предупреждение: Arduino не ответил строкой "Ready" при старте.
+            # Возможные причины: старая прошивка, слишком короткий timeout, или Arduino ещё загружается.
+            # Не бросаем исключение — продолжаем работу, но сообщаем о проблеме.
+            print(f"[RelayController] WARNING: unexpected startup message: '{startup}'. Expected 'Ready'.")
 
     def _send(self, command: str) -> str:
         """Отправить команду, вернуть ответ Arduino."""

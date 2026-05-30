@@ -1,0 +1,58 @@
+# =============================================================
+# TegamCAL — .gitignore
+# =============================================================
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs & temp files ---
+*.log
+*.tmp
+*.bak
+*.swp
+
+# --- Config with real data (Stage 2: contains serial numbers, certs) ---
+# config/config.xlsx НЕ игнорируется — это шаблон конфигурации,
+# нужный для запуска программы. Реальные данные будут в Stage 2.
+# config/secrets.ini  ← раскомментировать если появятся секреты
+
+# --- Reports (генерируются программой, не хранятся в репо) ---
+reports/
+*.xlsx.bak
+
+# --- SQLite database files ---
+*.db
+*.sqlite
+*.sqlite3
+
+# --- Arduino build artifacts ---
+TegamCAL_Relay.ino/build/
+TegamCAL_Relay.ino/*.elf
+TegamCAL_Relay.ino/*.hex
+TegamCAL_Relay.ino/*.map
